@@ -1,0 +1,25 @@
+{
+  "name": "qa_api",
+  "version": "1.0.0",
+  "description": "Hello world!",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Data-Scrubbers/qa_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Data-Scrubbers/qa_api/issues"
+  },
+  "homepage": "https://github.com/Data-Scrubbers/qa_api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.7"
+  }
+}
