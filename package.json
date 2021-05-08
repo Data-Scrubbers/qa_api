@@ -20,6 +20,8 @@
   "homepage": "https://github.com/Data-Scrubbers/qa_api#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.12.7"
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.7",
+    "save": "^2.4.0"
   }
 }
