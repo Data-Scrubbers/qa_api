@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const answersSchema = mongoose.Schema({
     _id: Number,
@@ -9,14 +10,17 @@ const answersSchema = mongoose.Schema({
     answerer_email: String,
     reported: Boolean,
     helpfulness: Number,
-    photos:[{
+    photos:{
       _id: Number,
       answer_id: Number,
       url: String
-    }]
+    }
 }, {
   collection: 'answers'
 });
+answersSchema.plugin(AutoIncrement, {inc_field: '_id', start_seq: 1048577});
+answersSchema.plugin(AutoIncrement, {id: 'photoId_counter', inc_field: 'photos._id', start_seq: 313643});
+answersSchema.plugin(AutoIncrement, {id: 'photoAnswerId_counter', inc_field: 'photos.answer_id', start_seq: 1048577});
 
 
 const Answers = mongoose.model('Answers', answersSchema);
@@ -41,12 +45,9 @@ const report = (aid, cb) => {
   Answers.findOneAndUpdate(filter, update).exec(cb);
 }
 
-const count = 1048577;
+
 const addAnswer = (qid, params, cb) => {
-  const numAnswers = Answers._id;
-  console.log('this is numAnswers: ', numAnswers);
   Answers.create({
-    _id: count,
     question_id: qid,
     body: params[0],
     date: Date(),
@@ -54,12 +55,17 @@ const addAnswer = (qid, params, cb) => {
     answerer_email: params[2],
     reported: false,
     helpfulness: 0,
-    photos:[{
-      answer_id: count,
+    photos:{
       url: params[3]
-    }]
+    }
+  }, (err) => {
+    if (err) {
+      cb(err);
+    } else {
+      cb();
+    }
   });
-  count++;
+
 }
 
 module.exports.getAnswers = getAnswers;

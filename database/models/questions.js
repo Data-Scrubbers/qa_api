@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 const answer = require('./answers')
 
 const questionsSchema = mongoose.Schema({
@@ -14,16 +15,25 @@ const questionsSchema = mongoose.Schema({
 }, {
   collection: 'questions'
 });
-
+questionsSchema.plugin(AutoIncrement, {inc_field: 'question_id', start_seq: 1048576});
 let Questions = mongoose.model('Questions', questionsSchema);
 
 
 const getQuestions = (obj, cb) => {
   if (!obj.count && !obj.page) {
-    Questions.find({product_id: obj.product_id}).limit(5).populate({
-      path: 'answers',
-      match: 'question_id'
-    }).exec(cb);
+    Questions.find({product_id: obj.product_id}).then(
+      Questions.aggregate([
+        {
+          '$lookup': {
+            'from': 'answers',
+            'localField': 'question_id',
+            'foreignField': 'question_id',
+            'as': 'answers'
+          }
+        }
+      ]).limit(5).exec(cb)
+    )
+
   } else {
     Questions.find({product_id: obj.product_id}).limit(Number(obj.count)).populate('answers').exec(cb);
   }
@@ -31,7 +41,6 @@ const getQuestions = (obj, cb) => {
 
 const addQuestion = (params, cb) => {
   Questions.create({
-    question_id: Number,
     product_id: params[3],
     question_body: params[0],
     question_date: Date(),
@@ -39,6 +48,9 @@ const addQuestion = (params, cb) => {
     asker_email: params[2],
     reported: false,
     helpfulness: 0,
+  }, (err, data) => {
+    if (err) return handleError(err);
+    cb();
   })
 }
 
@@ -57,3 +69,4 @@ const report = (qid, cb) => {
 module.exports.getQuestions = getQuestions;
 module.exports.markHelpful = markHelpful;
 module.exports.report = report;
+module.exports.addQuestion = addQuestion;
