@@ -19,23 +19,22 @@ questionsSchema.plugin(AutoIncrement, {inc_field: 'question_id', start_seq: 1048
 let Questions = mongoose.model('Questions', questionsSchema);
 
 
-const getQuestions = (obj, cb) => {
-  if (!obj.count && !obj.page) {
-    Questions.find({product_id: obj.product_id}).then(
-      Questions.aggregate([
-        {
-          '$lookup': {
-            'from': 'answers',
-            'localField': 'question_id',
-            'foreignField': 'question_id',
-            'as': 'answers'
-          }
+const getQuestions = (product_id, page, count, cb) => {
+  if (!count && !page) {
+    Questions.aggregate([
+      { $match: { product_id: Number(product_id) } },
+      {$limit: 5},
+      { $lookup: {
+          from: 'answers',
+          localField: 'question_id',
+          foreignField: 'question_id',
+          as: 'answers'
         }
-      ]).limit(5).exec(cb)
-    )
+      },
 
+    ]).exec(cb);
   } else {
-    Questions.find({product_id: obj.product_id}).limit(Number(obj.count)).populate('answers').exec(cb);
+    Questions.find({product_id: product_id}).limit(Number(count)).populate('answers').exec(cb);
   }
 }
 
