@@ -32,7 +32,7 @@ const getQuestions = (product_id, page, count, cb) => {
         }
       },
 
-    ]).exec(cb);
+    ]).explain(cb);
   } else {
     Questions.find({product_id: product_id}).limit(Number(count)).populate('answers').exec(cb);
   }
