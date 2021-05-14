@@ -5,7 +5,7 @@ export const options = {
   stages: [
     { duration: "1m", target: 10 },
     { duration: "1m", target: 1000 },
-    { duration: "3m", target: 2500 },
+    { duration: "3m", target: 1000 },
   ],
   ext: {
     loadimpact: {
@@ -19,10 +19,7 @@ export const options = {
 export default function main() {
   let response;
 
-  // Post questions
-  response = http.post(
-    "http://localhost:3000/qa/questions/?body=asdfasdf&name=sldkjfa%3Bslkd&email=aslkdjf&product_id=14"
-  );
+  response = http.put("http://localhost:3000/qa/answers/27/report");
 
   // Automatically added sleep
   sleep(1);

@@ -16,8 +16,7 @@ module.exports = {
     })
   },
   add: (req, res) => {
-    const params = [req.query.body, req.query.name, req.query.email, req.query.product_id];
-    questions.addQuestion(params, (err, data) => {
+    questions.addQuestion(req.query, (err, data) => {
       if (err) {
         res.send(err);
       } else {

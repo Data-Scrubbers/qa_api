@@ -38,17 +38,17 @@ const getQuestions = (product_id, page, count, cb) => {
   }
 }
 
-const addQuestion = (params, cb) => {
+const addQuestion = (query, cb) => {
   Questions.create({
-    product_id: params[3],
-    question_body: params[0],
+    product_id: query.product_id,
+    question_body: query.body,
     question_date: Date(),
-    asker_name: params[1],
-    asker_email: params[2],
+    asker_name: query.name,
+    asker_email: query.email,
     reported: false,
     helpfulness: 0,
   }, (err, data) => {
-    if (err) return handleError(err);
+    if (err) console.log(err);
     cb();
   })
 }

@@ -17,8 +17,8 @@ module.exports = {
   },
 
   add: (req, res) => {
-    const params = [req.query.body, req.query.name, req.query.email, req.query.photos];
-    Answers.addAnswer(req.params.question_id, params, (err, data) => {
+
+    Answers.addAnswer(req.params.question_id, req.query, (err, data) => {
       console.log('this is server params: ', params);
       if (err) {
         res.send(err);

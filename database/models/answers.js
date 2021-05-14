@@ -46,17 +46,17 @@ const report = (aid, cb) => {
 }
 
 
-const addAnswer = (qid, params, cb) => {
+const addAnswer = (qid, query, cb) => {
   Answers.create({
     question_id: qid,
-    body: params[0],
+    body: query.body,
     date: Date(),
-    answerer_name: params[1],
-    answerer_email: params[2],
+    answerer_name: query.name,
+    answerer_email: query.email,
     reported: false,
     helpfulness: 0,
     photos:{
-      url: params[3]
+      url: query.photos
     }
   }, (err) => {
     if (err) {
