@@ -9,8 +9,8 @@ db
   .then(() => {
     console.log('Mongoose is connected!');
   })
-  .catch(() => {
-    console.log('Mongoose error');});
+  .catch((error) => {
+    console.log('Mongoose error: ', error);});
 
 const AutoIncrement = AutoIncrementFactory(db);
 
